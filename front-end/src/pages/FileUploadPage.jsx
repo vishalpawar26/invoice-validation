@@ -21,7 +21,6 @@ const FileUploadPage = () => {
       console.log(response);
       if (response.data.success == true) {
         setFileData(response.data.data);
-        console.log(fileData);
         navigate("/data");
       }
     } catch (error) {

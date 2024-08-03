@@ -2,6 +2,8 @@ const csv = require("csv-parser");
 const xlsx = require("xlsx");
 const fs = require("fs");
 
+const validateFileData = require("./validators");
+
 const parseCSV = (filePath) => {
   return new Promise((resolve, reject) => {
     const fileData = [];
@@ -48,10 +50,15 @@ function convertExcelDate(excelDate) {
 
 const fileParser = async (filePath) => {
   if (filePath.endsWith(".csv")) {
-    return await parseCSV(filePath);
+    const parsedData = await parseCSV(filePath);
+    const errors = validateFileData(parsedData);
+    if (errors.length > 0) {
+      return errors;
+    }
+    return parsedData;
   } else if (filePath.endsWith(".xlsx") || filePath.endsWith(".xls")) {
-    const fileData = parseExcel(filePath);
-    fileData.forEach((row) => {
+    const parsedData = parseExcel(filePath);
+    parsedData.forEach((row) => {
       if (typeof row.Date === "number") {
         // converting excel date to JavaScript Date
         row.Date = convertExcelDate(row.Date);
@@ -65,7 +72,11 @@ const fileParser = async (filePath) => {
         row.Date = new Intl.DateTimeFormat("en-GB", options).format(row.Date);
       }
     });
-    return fileData;
+    const errors = validateFileData(parsedData);
+    if (errors.length > 0) {
+      return errors;
+    }
+    return parsedData;
   } else {
     throw new Error("Unsupported File Format");
   }
