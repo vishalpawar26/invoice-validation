@@ -55,7 +55,7 @@ There are two ways of uploading an invoice file,
 For rows with errors, the application displays the specific errors alongside the problematic rows in a table format. This allows users to easily identify and correct issues.
 
 ### Example Error Report
-![Example Error Report](https://github.com/vishalpawar26/invoice-validation/blob/main/example-images/Screenshot%202024-08-04%20101958.png)
+![Example Error Report](https://github.com/vishalpawar26/invoice-validation/blob/main/example-files/images/Screenshot%202024-08-04%20101958.png)
 
 ## JSON Structure
 Valid invoices are converted into the following JSON structure:
@@ -91,7 +91,7 @@ Valid invoices are converted into the following JSON structure:
   - total: Total price for the item (quantity * price).
 
 ### Example Valid Invoice
-![Example Invoice](https://github.com/vishalpawar26/invoice-validation/blob/main/example-images/Screenshot%202024-08-04%20102901.png)
+![Example Invoice](https://github.com/vishalpawar26/invoice-validation/blob/main/example-files/images/Screenshot%202024-08-04%20102901.png)
 
 ## Assumptions & Design Dicisions
 1. **File Format Support:** The service supports CSV and Excel formats (.csv, .xlsx, .xls), assuming these are the most common formats for invoice data.
