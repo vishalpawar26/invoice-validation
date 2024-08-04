@@ -19,9 +19,12 @@ const FileUploadPage = () => {
     try {
       const response = await axios.post(`${serverURL}/upload`, formData);
       console.log(response);
-      if (response.data.success == true) {
+      if (response.data.success === true && response.status === 200) {
         setFileData(response.data.data);
-        navigate("/data");
+        navigate("/invoices");
+      } else if (response.data.success === true && response.status === 206) {
+        setFileData(response.data.data);
+        navigate("/validation-errors");
       }
     } catch (error) {
       console.log("Error while sending file from client to server", error);

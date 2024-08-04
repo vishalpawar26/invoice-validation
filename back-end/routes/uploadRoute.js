@@ -38,7 +38,7 @@ const uploadRoute = (req, res) => {
       return res.status(200).json({
         success: true,
         message: "File uploaded and validated successfully",
-        data: fileData,
+        data: jsonData,
       });
     } catch (error) {
       fs.unlinkSync(path);
