@@ -1,0 +1,114 @@
+openapi: 3.0.0
+info:
+  title: Invoice Upload and Validation Service
+  description: An API to upload and validate invoice data from CSV or Excel files.
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000
+    description: Local server
+paths:
+  /upload:
+    post:
+      summary: Upload an invoice file
+      description: Upload a CSV or Excel file containing invoice data for validation and processing.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: The CSV or Excel file to upload.
+      responses:
+        "200":
+          description: Successful file upload and all data validated.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "File uploaded successfully. All data validated."
+                  validInvoices:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Invoice"
+        "206":
+          description: File uploaded but contains rows with errors.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "File uploaded with errors. Please check the errors list."
+                  validInvoices:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Invoice"
+                  errors:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Error"
+        "400":
+          description: Invalid file format or critical validation error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Invalid file format or validation error."
+components:
+  schemas:
+    Invoice:
+      type: object
+      properties:
+        invoiceNumber:
+          type: string
+          example: "INV001"
+        date:
+          type: string
+          format: date
+          example: "2024-08-01"
+        customerName:
+          type: string
+          example: "John Doe"
+        totalAmount:
+          type: number
+          format: float
+          example: 100.00
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              description:
+                type: string
+                example: "Item 1"
+              quantity:
+                type: integer
+                example: 2
+              price:
+                type: number
+                format: float
+                example: 50.00
+              total:
+                type: number
+                format: float
+                example: 100.00
+    Error:
+      type: object
+      properties:
+        rowNumber:
+          type: integer
+          example: 2
+        errorMessage:
+          type: string
+          example: "Customer Name is required; Item Quantity must be a valid number."
